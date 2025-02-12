@@ -17,11 +17,11 @@ class RoleActivity extends Model
 
     public function thecreatedby()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     public function therole()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(Role::class, 'role_id')->withTrashed();
     }
 }

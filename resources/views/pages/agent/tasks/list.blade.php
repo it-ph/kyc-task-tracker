@@ -42,7 +42,7 @@
                             </div>
                             <p id="status" style="display:none">{{ $status }}</p>
                             <span id="create_button">
-                                @if(Auth::user()->hasActiveTask())
+                                @if(auth()->user()->hasActiveTask())
                                     <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="has_active_task()"><i class="fas fa-plus"></i> Create</button>
                                 @else
                                     <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addTaskModal"><i class="fas fa-plus"></i> Create</button>

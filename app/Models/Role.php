@@ -17,7 +17,7 @@ class Role extends Model
 
     public function thecreatedby()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     public function theroleactivities()

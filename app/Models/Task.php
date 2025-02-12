@@ -19,56 +19,49 @@ class Task extends Model
 
     public function scopeOMPermission($query)
     {
-        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+        return $query->where('cluster_id',auth()->user()->cluster_id);
     }
 
     public function scopeTLPermission($query)
     {
-        return $query->whereHas('thepermission', function ($q){
-                $q->where('tl_id',Auth::user()->emp_id);
-            })
-            ->where('cluster_id',Auth::user()->thepermisssion->cluster_id)
-            ->orwhere('agent_id',Auth::user()->emp_id);
+        return $query->where('tl_id',auth()->user()->id)
+            ->where('cluster_id',auth()->user()->cluster_id)
+            ->orwhere('agent_id',auth()->user()->id);
     }
 
     public function scopeAccountantPermission($query)
     {
-        return $query->where('agent_id',Auth::user()->emp_id);
+        return $query->where('agent_id',auth()->user()->id);
     }
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id');
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();
     }
 
     public function theclient()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();
     }
 
     public function theagent()
     {
-        return $this->belongsTo(User::class, 'agent_id', 'emp_id');
+        return $this->belongsTo(User::class, 'agent_id', 'id')->withTrashed();
     }
 
     public function thepermission()
     {
-        return $this->hasOne(Permission::class, 'user_id', 'agent_id');
-    }
-
-    public function thedashboardactivity()
-    {
-        return $this->belongsTo(DashboardActivity::class, 'dashboard_activity_id');
+        return $this->hasOne(Permission::class, 'user_id', 'agent_id')->withTrashed();
     }
 
     public function theclientactivity()
     {
-        return $this->belongsTo(ClientActivity::class, 'client_activity_id');
+        return $this->belongsTo(ClientActivity::class, 'client_activity_id')->withTrashed();
     }
 
     public function thecreatedby()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     public function thetasklogs()

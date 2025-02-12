@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Cluster;
-use App\Models\Permission;
-use App\Models\UserProfile;
 use App\Models\ClientActivity;
-use App\Models\DashboardActivity;
+use App\Models\Role;
 use Illuminate\Support\Facades\View;
 
 class GlobalVariableController extends Controller
 {
-    public $clusters,$clients,$client_activities,$users,$permissions,$tls,$oms;
+    public $clusters,$clients,$client_activities,$roles,$users,$permissions,$tls,$oms;
 
     public function __construct()
     {
@@ -22,12 +20,18 @@ class GlobalVariableController extends Controller
             ->orderBy('name', 'ASC')
             ->get();
 
+
         $this->clients = Client::query()
             ->select('id','name')
             ->orderBy('name', 'ASC')
             ->get();
 
         $this->client_activities = ClientActivity::query()
+            ->select('id','name')
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        $this->roles = Role::query()
             ->select('id','name')
             ->orderBy('name', 'ASC')
             ->get();
@@ -48,22 +52,21 @@ class GlobalVariableController extends Controller
             ->where('permission','<>','superadmin')
             ->get();
 
-        // $permissions = Permission::query()
-        //         ->from('permissions as ftp')
-        //         ->leftjoin('users as hr','ftp.user_id', '=', 'hr.emp_id')
-        //         ->select(['ftp.id','ftp.user_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id'])
-        //         ->whereIn('ftp.permission',['admin','team leader','operations manager'])
-        //         ->orderBy('hr.fullname')
-        //         ->get();
+        $permissions = User::query()
+            ->whereIn('permission',['admin','team leader','operations manager'])
+            ->orderBy('fullname')
+            ->get();
 
-        // $this->tls = $permissions;
-        // $this->oms = $permissions;
+
+        $this->tls = $permissions;
+        $this->oms = $permissions;
 
         View::share('clusters', $this->clusters);
         View::share('clients', $this->clients);
         View::share('client_activities', $this->client_activities);
+        View::share('roles', $this->roles);
         View::share('users', $this->users);
-        // View::share('permissions', $this->permissions);
+        View::share('permissions', $this->permissions);
         View::share('tls', $this->tls);
         View::share('oms', $this->oms);
     }

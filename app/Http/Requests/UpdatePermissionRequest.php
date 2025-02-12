@@ -28,8 +28,10 @@ class UpdatePermissionRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required'],
+            'fullname' => ['required'],
+            // 'email' => ['required','unique:users,email'],
             'cluster_id' => ['required'],
+            'role_id' => ['required'],
             'permission' => ['required'],
         ];
     }
@@ -37,8 +39,11 @@ class UpdatePermissionRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_id.required' => 'Employee Name is required.',
+            'fullname.required' => 'Employee Name is required.',
+            // 'email.required' => 'Email Address is required.',
+            // 'email.unique' => 'Email Address is already exists.',
             'cluster_id.required' => 'Cluster is required.',
+            'role.required' => 'Role is required.',
             'permission.required' => 'Permission is required.',
         ];
     }

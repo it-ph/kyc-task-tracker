@@ -18,11 +18,11 @@ class Client extends Model
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id');
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();
     }
 
     public function scopeCluster($query)
     {
-        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+        return $query->where('cluster_id',auth()->user()->cluster_id);
     }
 }

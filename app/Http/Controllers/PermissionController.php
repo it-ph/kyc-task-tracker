@@ -79,16 +79,22 @@ class PermissionController extends GlobalVariableController
 
     public function getTLOMs($cluster_id)
     {
-        $permissions = Permission::query()
-                ->from('permissions as ftp')
-                ->leftjoin('users as hr','ftp.user_id', '=', 'hr.emp_id')
-                ->select(['ftp.id','ftp.user_id','ftp.cluster_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id'])
-                ->where('ftp.cluster_id',$cluster_id)
-                ->whereIn('ftp.permission',['admin','team leader','operations manager'])
-                ->orderBy('hr.fullname')
-                ->get();
+        // $permissions = Permission::query()
+        //         ->from('permissions as ftp')
+        //         ->leftjoin('users as hr','ftp.user_id', '=', 'hr.emp_id')
+        //         ->select(['ftp.id','ftp.user_id','ftp.cluster_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id'])
+        //         ->where('ftp.cluster_id',$cluster_id)
+        //         ->whereIn('ftp.permission',['admin','team leader','operations manager'])
+        //         ->orderBy('hr.fullname')
+        //         ->get();
 
-        return $permissions;
+        $users = User::query()
+            ->where('cluster_id',$cluster_id)
+            ->whereIn('permission',['admin','team leader','operations manager'])
+            ->orderBy('fullname')
+            ->get();
+
+        return $users;
     }
 
     public function getAccountants($user_id)
@@ -138,7 +144,8 @@ class PermissionController extends GlobalVariableController
     {
         $result = $this->successResponse('User created successfully!');
         try {
-            Permission::create($request->all());
+            $request['status'] = "active";
+            User::create($request->all());
         } catch (\Throwable $th)
         {
             $result = $this->errorResponse($th);
@@ -150,7 +157,7 @@ class PermissionController extends GlobalVariableController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -158,7 +165,7 @@ class PermissionController extends GlobalVariableController
         $result = $this->successResponse('User retrieved successfully!');
         try
         {
-            $result["data"] = Permission::findOrfail($id);
+            $result["data"] = User::findOrfail($id);
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
         }
@@ -169,10 +176,10 @@ class PermissionController extends GlobalVariableController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Permission $permission)
+    public function edit(User $user)
     {
         //
     }
@@ -181,14 +188,14 @@ class PermissionController extends GlobalVariableController
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdatePermissionRequest  $request
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function update(UpdatePermissionRequest $request, $id)
     {
         $result = $this->successResponse('User updated successfully!');
         try {
-            Permission::findOrfail($id)->update($request->all());
+            User::findOrfail($id)->update($request->all());
         } catch (\Throwable $th)
         {
             $result = $this->errorResponse($th);
@@ -200,30 +207,31 @@ class PermissionController extends GlobalVariableController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $permission = Permission::findOrfail($id);
-        $has_related_permission = Permission::where('tl_id', $permission->user_id)->orwhere('om_id', $permission->user_id)->first();
-        $has_related_task = Task::where('agent_id', $permission->user_id)->first();
-        $has_related_client_activity = ClientActivity::where('agent_id', $permission->user_id)->first();
+        // $permission = Permission::findOrfail($id);
+        // $has_related_permission = Permission::where('tl_id', $permission->user_id)->orwhere('om_id', $permission->user_id)->first();
+        // $has_related_task = Task::where('agent_id', $permission->user_id)->first();
+        // $has_related_client_activity = ClientActivity::where('agent_id', $permission->user_id)->first();
 
-        if($has_related_permission || $has_related_task || $has_related_client_activity)
-        {
-            $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
-        }
-        else
-        {
+        // if($has_related_permission || $has_related_task || $has_related_client_activity)
+        // {
+        //     $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
+        // }
+        // else
+        // {
+            $user = User::findOrfail($id);
             $result = $this->successResponse('User deleted successfully!');
             try {
-                $permission->delete();
+                $user->update(['status' => 'deactivated']);
             } catch (\Throwable $th)
             {
                 return $this->errorResponse($th);
             }
-        }
+        // }
 
         return $this->returnResponse($result);
     }

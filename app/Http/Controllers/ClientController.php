@@ -44,7 +44,7 @@ class ClientController extends GlobalVariableController
         $clients = Client::query()
             ->with('thecluster');
 
-        if(Auth::user()->isAdmin())
+        if(auth()->user()->permission == 'admin')
         {
             $clients = $clients->get();
         }

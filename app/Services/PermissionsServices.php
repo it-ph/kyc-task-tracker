@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class PermissionsServices
 {
@@ -15,6 +14,7 @@ class PermissionsServices
             'theclient:id,name',
             'thetl:id,fullname',
             'theom:id,fullname',
+            'therole:id,name',
         ])
         ->select('id','email','fullname','cluster_id','client_id','tl_id','om_id','role_id','permission','status')
         ->where('permission','<>','superadmin');
@@ -35,18 +35,16 @@ class PermissionsServices
             $users = $users->TLPermission()->get();
         }
 
-
-        dd($users);
-
         foreach($users as $value) {
-            $employee_name = $value->theuser ? $value->theuser->fullname.' '.$value->theuser->last_name : "";
-            $email_address = $value->theuser ? strtolower($value->theuser->email) : "";
+            $employee_name = ucwords($value->fullname);
+            $email_address = strtolower($value->email);
             $cluster = $value->thecluster ? $value->thecluster->name : "";
             $client = $value->theclient ? $value->theclient->name : "";
-            $team_leader = $value->thetl ? $value->thetl->theuser->fullname.' '.$value->thetl->theuser->last_name : "";
-            $operations_manager = $value->theom ? $value->theom->theuser->fullname.' '.$value->theom->theuser->last_name : "";
+            $team_leader = $value->thetl ? $value->thetl->fullname : "";
+            $operations_manager = $value->theom ? $value->theom->fullname : "";
+            $role = $value->therole ? ucwords($value->therole->name) : "";
             $permission = ucwords($value->permission);
-            $employment_status = $value->theuser->employment_status == 'active' ? '<span class="text-success"><strong>Active</strong></span>' : '<label class="text-danger"><strong>Inactive</strong></label>';
+            $status = $value->status == 'active' ? '<span class="text-success"><strong>Active</strong></span>' : '<label class="text-danger"><strong>Inactive</strong></label>';
             $action ='<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit User" onclick=PERMISSION.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>';
                     // <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Delete User" onclick=PERMISSION.destroy('.$value->id.')><i class="fas fa-times"></i></button>';
 
@@ -58,8 +56,9 @@ class PermissionsServices
                 'client' => $client,
                 'team_leader' => $team_leader,
                 'operations_manager' => $operations_manager,
+                'role' => $role,
                 'permission' => $permission,
-                'employment_status' => $employment_status,
+                'status' => $status,
                 'action' => $action,
             ];
         }

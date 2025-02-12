@@ -10,18 +10,15 @@
                 <form id="storePermissionForm" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                        <select class="form-control select2" name="user_id" style="width:100%;">
-                            <option value="" selected disabled>-- Select Employee -- </option>
-                                {{-- @foreach ($users as $user )
-                                    @if($user)
-                                        <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                            value="{{ $user->id }}">{{ ucwords($user->fullname) }}
-                                        </option>
-                                    @endif
-                                @endforeach --}}
-                        </select>
-                        <label id="user_idError" class="error" style="display:none"></label>
+                        <label for="fullname" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
+                        <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Enter Full Name">
+                        <label id="fullnameError" class="error" style="display:none"></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-form-label custom-label"><strong>EMAIL ADDRESS:<span class="important">*</span></strong></label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter Amail Address">
+                        <label id="emailError" class="error" style="display:none"></label>
                     </div>
 
                     <div class="form-group">
@@ -61,10 +58,25 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="role_id" class="col-form-label custom-label"><strong>ROLE:<span class="important">*</span></strong></label>
+                        <select class="form-control select2" name="role_id" id="role_id" style="width:100%;">
+                            <option value="" selected disabled>-- Select Role -- </option>
+                                @foreach ($roles as $role )
+                                    @if($role)
+                                        <option {{ old('role_id') == $role->id ? "selected" : "" }}
+                                            value="{{ $role->id }}">{{ ucwords($role->name) }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                        </select>
+                        <label id="role_idError" class="error" style="display:none"></label>
+                    </div>
+
+                    <div class="form-group">
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            {{-- @if(Auth::user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif --}}
+                            @if(auth()->user()->permission == 'admin')<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif
                             <option {{ old('permission') == "agent" ? "selected" : "" }} value="agent" >Agent</option>
                             <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>

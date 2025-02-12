@@ -40,14 +40,7 @@ const PERMISSION = (() => {
                         $("#tbl_permission_info").hide();
                         $("#tbl_permission_paginate").hide();
                         $('#storePermissionForm')[0].reset();
-                        $("#user_id").val(null).trigger("change");
-                        $("#cluster_id").val(null).trigger("change");
-                        $("#client_id").val(null).trigger("change");
-                        $("#tl_id").val(null).trigger("change");
-                        $("#om_id").val(null).trigger("change");
-                        $("#permission").val(null).trigger("change");
-                        $('.error').hide();
-                        $('.error').text('');
+                        resetForm();
                         PERMISSION.load();
                         $('#addPermissionModal').modal('hide');
                         toastr.success(response.data.message);
@@ -84,8 +77,9 @@ const PERMISSION = (() => {
                         <td>${val.client}</td>
                         <td>${val.team_leader}</td>
                         <td>${val.operations_manager}</td>
+                        <td>${val.role}</td>
                         <td>${val.permission}</td>
-                        <td>${val.employment_status}</td>
+                        <td>${val.status}</td>
                         <td class="text-center">${val.action}</td>
                     </tr>`;
             });
@@ -126,25 +120,21 @@ const PERMISSION = (() => {
     // show data
     this_permission.show = (id) => {
         $('#editPermissionModal').modal('show');
-        $('.error').hide();
-        $('.error').text('');
-        $("#user_id_edit").val(null).trigger("change");
-        $("#cluster_id_edit").val(null).trigger("change");
-        $("#client_id_edit").val(null).trigger("change");
-        $("#tl_id_edit").val(null).trigger("change");
-        $("#om_id_edit").val(null).trigger("change");
-        $("#permission_edit").val(null).trigger("change");
+        resetForm();
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
         axios(`${APP_URL}/permission/show/${id}`).then(function(response) {
             _permission_id = id;
-            $("#user_id_edit").val(response.data.data.user_id).trigger("change");
+            $("#fullname_edit").val(response.data.data.fullname).trigger("change");
+            $("#email_edit").val(response.data.data.email).trigger("change");
             $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
             $("#tl_id_edit").val(response.data.data.tl_id).trigger("change");
             $("#om_id_edit").val(response.data.data.om_id).trigger("change");
+            $("#role_id_edit").val(response.data.data.role_id).trigger("change");
             $("#permission_edit").val(response.data.data.permission).trigger("change");
+            $("#status_edit").val(response.data.data.status).trigger("change");
             $('#btn_update').empty();
             $('#btn_update').append('<i class="fa fa-save"></i> Update');
             $('#btn_update').prop("disabled", false);
@@ -190,13 +180,7 @@ const PERMISSION = (() => {
                         $("#tbl_permission > tbody").empty();
                         $("#tbl_permission_info").hide();
                         $("#tbl_permission_paginate").hide();
-                        $('#editPermissionForm')[0].reset();
-                        $("#user_id_edit").val(null).trigger("change");
-                        $("#cluster_id_edit").val(null).trigger("change");
-                        $("#client_id_edit").val(null).trigger("change");
-                        $("#tl_id_edit").val(null).trigger("change");
-                        $("#om_id_edit").val(null).trigger("change");
-                        $("#permission_edit").val(null).trigger("change");
+                        resetForm();
                         PERMISSION.load();
                         $('.error').hide();
                         $('.error').text('');
@@ -255,6 +239,32 @@ const PERMISSION = (() => {
                     });
             }
         });
+    }
+
+    function resetForm() {
+        $('#storePermissionForm')[0].reset();
+        $("#fullname").val(null);
+        $("#email").val(null);
+        $("#cluster_id").val(null).trigger("change");
+        $("#client_id").val(null).trigger("change");
+        $("#tl_id").val(null).trigger("change");
+        $("#om_id").val(null).trigger("change");
+        $("#role_id").val(null).trigger("change");
+        $("#permission").val(null).trigger("change");
+
+        $('#editPermissionForm')[0].reset();
+        $("#fullname_edit").val(null);
+        $("#email_edit").val(null);
+        $("#cluster_id_edit").val(null).trigger("change");
+        $("#client_id_edit").val(null).trigger("change");
+        $("#tl_id_edit").val(null).trigger("change");
+        $("#om_id_edit").val(null).trigger("change");
+        $("#role_id_edit").val(null).trigger("change");
+        $("#permission_edit").val(null).trigger("change");
+        $("#status_edit").val(null).trigger("change");
+
+        $('.error').hide();
+        $('.error').text('');
     }
 
     return this_permission;

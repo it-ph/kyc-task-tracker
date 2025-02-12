@@ -71,7 +71,7 @@
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
-    {{-- <script>
+    <script>
         function getClientTLOMs()
         {
             var cluster_id = $('#cluster_id').val();
@@ -119,14 +119,14 @@
                             $('#tl_id').append('<option value="">'+ '-- Select Team Leader --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#tl_id').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                                $('#tl_id').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
 
                             $('#om_id').empty();
                             $('#om_id').append('<option value="">'+ '-- Select Operations Manager --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#om_id').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                                $('#om_id').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
 
                         }
@@ -198,14 +198,14 @@
                             $('#tl_id_edit').append('<option value="">'+ '-- Select Team Leader --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#tl_id_edit').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                                $('#tl_id_edit').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
 
                             $('#om_id_edit').empty();
                             $('#om_id_edit').append('<option value="">'+ '-- Select Operations Manager --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#om_id_edit').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                                $('#om_id_edit').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
 
                         }
@@ -229,7 +229,7 @@
                 $('#client_id_edit option[value=""]').prop('selected', true);
             }
         }
-    </script> --}}
+    </script>
 @endsection
 
 @section('custom-js')
