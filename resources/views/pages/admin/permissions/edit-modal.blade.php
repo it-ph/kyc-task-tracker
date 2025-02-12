@@ -13,7 +13,7 @@
                         <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="user_id" id="user_id_edit" style="width:100%;">
                             <option value="" disabled>-- Select Employee -- </option>
-                                @foreach ($users as $user )
+                                {{-- @foreach ($users as $user )
                                     @if($user)
                                         @isset($user)
                                             <option {{ old('user_id') == $user->emp_id ? "selected" : "" }}
@@ -21,7 +21,7 @@
                                             </option>
                                         @endisset
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                         <label id="user_id_editError" class="error"></label>
                     </div>
@@ -59,7 +59,7 @@
                         <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEADER:</strong></label>
                         <select class="form-control select2" name="tl_id" id="tl_id_edit" style="width:100%;">
                             <option value="">-- Select Team Leader -- </option>
-                                @foreach ($tls as $tl )
+                                {{-- @foreach ($tls as $tl )
                                     @if($tl)
                                         @isset($tl->theuser)
                                             <option {{ old('tl_id') == $tl->theuser->emp_id ? "selected" : "" }}
@@ -67,7 +67,7 @@
                                             </option>
                                         @endisset
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                     </div>
 
@@ -75,7 +75,7 @@
                         <label for="om_id" class="col-form-label custom-label"><strong>OPERATIONS MANAGER:</strong></label>
                         <select class="form-control select2" name="om_id" id="om_id_edit" style="width:100%;">
                             <option value="">-- Select Operations Manager -- </option>
-                                @foreach ($oms as $om )
+                                {{-- @foreach ($oms as $om )
                                     @if($om)
                                         @isset($om->theuser)
                                             <option {{ old('om_id') == $om->theuser->emp_id ? "selected" : "" }}
@@ -83,7 +83,7 @@
                                             </option>
                                         @endisset
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                     </div>
 
@@ -91,7 +91,7 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission" id="permission_edit">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            <option {{ old("permission") == "admin" ? "selected" : "" }} value="admin"@if(!Auth::user()->isAdmin()) disabled @endif>Admin</option>
+                            {{-- <option {{ old("permission") == "admin" ? "selected" : "" }} value="admin"@if(!Auth::user()->isAdmin()) disabled @endif>Admin</option> --}}
                             <option {{ old("permission") == "accountant" ? "selected" : "" }} value="accountant">Accountant</option>
                             <option {{ old("permission") == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old("permission") == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>

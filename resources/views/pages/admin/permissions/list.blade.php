@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Users List @endsection
+@section('title') Users @endsection
 
 @section('css')
     <!-- DataTables -->
@@ -44,6 +44,7 @@
                                 <th>Client</th>
                                 <th>Team Leader</th>
                                 <th>Operations Manager</th>
+                                <th>Role</th>
                                 <th>Permission</th>
                                 <th>Status</th>
                                 <th width="5%"></th>
@@ -70,7 +71,7 @@
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
-    <script>
+    {{-- <script>
         function getClientTLOMs()
         {
             var cluster_id = $('#cluster_id').val();
@@ -228,7 +229,7 @@
                 $('#client_id_edit option[value=""]').prop('selected', true);
             }
         }
-    </script>
+    </script> --}}
 @endsection
 
 @section('custom-js')

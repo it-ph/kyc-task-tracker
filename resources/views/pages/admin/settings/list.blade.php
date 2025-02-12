@@ -53,12 +53,12 @@
         $(function() {
             var start = moment($('#date_from').val());
             var end = moment($('#date_to').val());
-        
+
             function cb(start, end) {
                 $('#reportrange span').html(start.format('dddd, MMMM D, YYYY hh:mm a') + ' - ' + end.format('dddd, MMMM D, YYYY hh:mm a'));
                 $('#allowed_date_range').val(start.format('YYYY-MM-DD hh:mm a') + ' - ' + end.format('YYYY-MM-DD hh:mm a'));
             }
-        
+
             $('#reportrange').daterangepicker({
                 startDate: start,
                 endDate: end,
@@ -67,7 +67,7 @@
                 "applyButtonClasses": "btn-primary",
                 "cancelClass": "btn-danger"
             }, cb);
-        
+
             cb(start, end);
         });
     </script>

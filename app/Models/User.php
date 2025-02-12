@@ -41,25 +41,50 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    function thepermisssion()
+    public function scopeTLPermission($query)
     {
-        return $this->hasOne(Permission::class, 'user_id', 'emp_id');
+        return $query->where('tl_id',auth()->user()->id)->where('cluster_id',auth()->user()->cluster_id)->orwhere('user_id',auth()->user()->id);
     }
 
-    public function theclientactivities()
+    public function scopeOMPermission($query)
     {
-        return $this->hasMany(ClientActivity::class, 'agent_id', 'emp_id');
+        return $query->where('cluster_id',auth()->user()->cluster_id);
+    }
+
+    public function therole()
+    {
+        return $this->hasOne(Role::class, 'role_id');
+    }
+
+    public function thetl()
+    {
+        return $this->belongsTo(User::class, 'tl_id', 'id');
+    }
+
+    public function theom()
+    {
+        return $this->belongsTo(User::class, 'om_id', 'id');
+    }
+
+    public function thecluster()
+    {
+        return $this->belongsTo(Cluster::class, 'cluster_id');
+    }
+
+    public function theclient()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
     public function thetasks()
     {
-        return $this->hasMany(Task::class, 'agent_id', 'emp_id');
+        return $this->hasMany(Task::class, 'agent_id');
     }
 
     public function hasActiveTask()
     {
         $hasActiveTask = Task::query()
-            ->where('agent_id', $this->emp_id)
+            ->where('agent_id', $this->id)
             ->where('status', 'In Progress')
             ->count();
 
@@ -70,164 +95,157 @@ class User extends Authenticatable
 
     public function isStatusActive()
     {
-        $hasPermission = User::query()
-            ->where('emp_id', $this->emp_id)
-            ->first();
-
-        if($this->employment_status  == 'active' && $hasPermission)
-        {
-            return true;
-        }
-        return false;
+        $isActive = $this->status == 'active'? true : false;
+        return $isActive;
     }
 
-    /**
-     *  START OF USER PERMISSIONS
-     */
+    // /**
+    //  *  START OF USER PERMISSIONS
+    //  */
 
-    // accountant
-    public function isAccountant()
-    {
-        $permission = 'accountant';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                $permission
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // accountant
+    // public function isAccountant()
+    // {
+    //     $permission = 'accountant';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             $permission
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // admin
-    public function isAdmin()
-    {
-        $permission = 'admin';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                'superadmin',
-                $permission
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // admin
+    // public function isAdmin()
+    // {
+    //     $permission = 'admin';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             'superadmin',
+    //             $permission
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // Team Leader
-    public function isTeamLeader()
-    {
-        $permission = 'team leader';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                'superadmin',
-                $permission
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // Team Leader
+    // public function isTeamLeader()
+    // {
+    //     $permission = 'team leader';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             'superadmin',
+    //             $permission
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // Operations Manager
-    public function isOperationsManager()
-    {
-        $permission = 'operations manager';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                'superadmin',
-                $permission
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // Operations Manager
+    // public function isOperationsManager()
+    // {
+    //     $permission = 'operations manager';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             'superadmin',
+    //             $permission
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // admin or team leader
-    public function isTeamLeaderOrAdmin()
-    {
-        $permission = 'team leader';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                'superadmin',
-                'admin',
-                $permission
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // admin or team leader
+    // public function isTeamLeaderOrAdmin()
+    // {
+    //     $permission = 'team leader';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             'superadmin',
+    //             'admin',
+    //             $permission
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // admin or operations manager
-    public function isOperationsManagerOrAdmin()
-    {
-        $permission = 'operations manager';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                'superadmin',
-                'admin',
-                $permission
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // admin or operations manager
+    // public function isOperationsManagerOrAdmin()
+    // {
+    //     $permission = 'operations manager';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             'superadmin',
+    //             'admin',
+    //             $permission
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // admin, team leader or operations manager
-    public function isTLOMOrAdmin()
-    {
-        $tl = 'team leader';
-        $om = 'operations manager';
-        $hasPermission = Permission::query()
-            ->whereIn('permission',[
-                'superadmin',
-                'admin',
-                $tl,
-                $om
-            ])
-            ->where('user_id',$this->emp_id)
-            ->first();
+    // // admin, team leader or operations manager
+    // public function isTLOMOrAdmin()
+    // {
+    //     $tl = 'team leader';
+    //     $om = 'operations manager';
+    //     $hasPermission = Permission::query()
+    //         ->whereIn('permission',[
+    //             'superadmin',
+    //             'admin',
+    //             $tl,
+    //             $om
+    //         ])
+    //         ->where('user_id',$this->emp_id)
+    //         ->first();
 
-        if($hasPermission)
-        {
-            return true;
-        }
+    //     if($hasPermission)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     /**
      * END OF USER PERMISSIONS

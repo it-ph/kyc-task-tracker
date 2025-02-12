@@ -22,7 +22,7 @@ class ClientController extends GlobalVariableController
 
     public function index()
     {
-        if(Auth::user()->isAdmin())
+        if(auth()->user()->permission == 'admin')
         {
             $clients = new ClientCollection(Client::query()
                 ->with('thecluster')

@@ -12,7 +12,8 @@
 
     @component('components.breadcrumb')
         @slot('li_1') Activities @endslot
-        @slot('title') @if(!Auth::user()->isAccountant()) {{ ucwords(\Request::get('role')) }}'s @endif Activity List @endslot
+        {{-- @slot('title') @if(!Auth::user()->isAccountant()) {{ ucwords(\Request::get('role')) }}'s @endif Activity List @endslot --}}
+        @slot('title') {{ ucwords(\Request::get('role')) }}'s Activity List @endslot
     @endcomponent
 
     <div class="row">
@@ -39,6 +40,7 @@
                             <tr>
                                 <th>Activity</th>
                                 <th>SLA (hours)</th>
+                                <th>Updated At</th>
                                 {{-- <th>Frequency</th>
                                 <th>Schedule</th>
                                 <th>Function</th> --}}

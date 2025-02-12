@@ -13,13 +13,13 @@
                         <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="user_id" style="width:100%;">
                             <option value="" selected disabled>-- Select Employee -- </option>
-                                @foreach ($users as $user )
+                                {{-- @foreach ($users as $user )
                                     @if($user)
-                                        <option {{ old('user_id') == $user->emp_id ? "selected" : "" }}
-                                            value="{{ $user->emp_id }}">{{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}
+                                        <option {{ old('user_id') == $user->id ? "selected" : "" }}
+                                            value="{{ $user->id }}">{{ ucwords($user->fullname) }}
                                         </option>
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                         <label id="user_idError" class="error" style="display:none"></label>
                     </div>
@@ -64,8 +64,8 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            @if(Auth::user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif
-                            <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant" >Accountant</option>
+                            {{-- @if(Auth::user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif --}}
+                            <option {{ old('permission') == "agent" ? "selected" : "" }} value="agent" >Agent</option>
                             <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
                         </select>

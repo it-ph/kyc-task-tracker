@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Activities List @endsection
+@section('title') Activities @endsection
 
 @section('css')
     <!-- DataTables -->

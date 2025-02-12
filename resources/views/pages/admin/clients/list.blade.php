@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Clients List @endsection
+@section('title') Clients @endsection
 
 @section('css')
     <!-- DataTables -->

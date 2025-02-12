@@ -110,7 +110,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
      * START OF ADMIN, TL, OM
      */
 
-    Route::group(['middleware' => ['tlom.admin'],], function ()
+    Route::group(['middleware' => ['role:superadmin,admin,operations manager,team leader'],], function ()
         {
             // Dashboard Activity
             Route::get('dashboard-activity-upload-template', [ExportController::class, 'uploadDashboardActivityTemplate'])->name('upload.dashboard-activity.template');
@@ -199,7 +199,10 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     /**
      * START OF ADMIN ONLY
      */
-        Route::resource('settings', SettingsController::class)->middleware('admin');
+    Route::group(['middleware' => ['role:superadmin,admin']], function ()
+    {
+        Route::resource('settings', SettingsController::class);
+    });
     /**
      * END OF ADMIN ONLY
      */
@@ -211,4 +214,4 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
  */
 
 //Language Translation
-Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
+// Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);

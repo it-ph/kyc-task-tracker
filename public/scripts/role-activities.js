@@ -77,6 +77,7 @@ const ACTIVITY = (() => {
                     `<tr>
                         <td>${val.name}</td>
                         <td>${val.sla}</td>
+                        <td>${val.updated_at}</td>
                         <td class="text-center">${val.action}</td>
                     </tr>`;
             });

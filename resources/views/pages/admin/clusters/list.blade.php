@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Clusters List @endsection
+@section('title') Clusters @endsection
 
 @section('css')
     <!-- DataTables -->

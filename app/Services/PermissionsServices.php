@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class PermissionsServices
@@ -10,37 +10,35 @@ class PermissionsServices
     public function load()
     {
         $datastorage = [];
-        $permissions = Permission::with([
-            'theuser:emp_id,email,fullname,last_name,employment_status',
+        $users = User::with([
             'thecluster:id,name',
             'theclient:id,name',
-            'thetl:user_id',
-            'thetl.theuser:emp_id,email',
-            'thetl.theuser:emp_id,fullname,last_name',
-            'theom:user_id',
-            'theom.theuser:emp_id,email',
-            'theom.theuser:emp_id,fullname,last_name',
+            'thetl:id,fullname',
+            'theom:id,fullname',
         ])
-        ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
+        ->select('id','email','fullname','cluster_id','client_id','tl_id','om_id','role_id','permission','status')
         ->where('permission','<>','superadmin');
 
         // admin
-        if(Auth::user()->isAdmin())
+        if(auth()->user()->permission == 'admin')
         {
-            $permissions = $permissions->get();
+            $users = $users->get();
         }
         // operations manager
-        elseif(Auth::user()->isOperationsManager())
+        elseif(auth()->user()->permission == 'operations manager')
         {
-            $permissions = $permissions->OMPermission()->get();
+            $users = $users->OMPermission()->get();
         }
         // team leader
-        elseif(Auth::user()->isTeamLeader())
+        elseif(auth()->user()->permission == 'team leader')
         {
-            $permissions = $permissions->TLPermission()->get();
+            $users = $users->TLPermission()->get();
         }
 
-        foreach($permissions as $value) {
+
+        dd($users);
+
+        foreach($users as $value) {
             $employee_name = $value->theuser ? $value->theuser->fullname.' '.$value->theuser->last_name : "";
             $email_address = $value->theuser ? strtolower($value->theuser->email) : "";
             $cluster = $value->thecluster ? $value->thecluster->name : "";
