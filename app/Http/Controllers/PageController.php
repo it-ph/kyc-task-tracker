@@ -55,7 +55,7 @@ class PageController extends GlobalVariableController
     public function showAgentTaskLists(Request $request)
     {
         // accountant
-        if(Auth::user()->isAccountant())
+        if(auth()->user()->permission == 'agent')
         {
             return redirect()->route('unauthorized');
         }
@@ -77,11 +77,11 @@ class PageController extends GlobalVariableController
         {
             return view('errors.404');
         }
-        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
+        $clients = auth()->user()->permission == 'admin' ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
 
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')
-            ->where('agent_id', Auth::user()->emp_id)
+            ->where('agent_id', auth()->user()->id)
             ->orderBy('name', 'ASC')
             ->get();
 
