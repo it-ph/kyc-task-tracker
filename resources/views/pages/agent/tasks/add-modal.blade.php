@@ -14,7 +14,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="agent_id" value="{{ auth()->user()->emp_id }}">
+                                    <input class="form-control" type="hidden" name="agent_id" value="{{ auth()->user()->id }}">
                                     <input class="form-control" type="text" disabled value="{{ auth()->user()->fullname }}">
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
@@ -102,6 +102,25 @@
                                             @endforeach
                                     </select>
                                     <label id="client_activity_idError" class="error" style="display:none"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="role_activity_id" class="col-form-label custom-label"><strong>ACTIVITY:<span class="important">*</span></strong></label>
+                                    <select class="form-control select2" name="role_activity_id" id="role_activity_id" style="width:100%;">
+                                        <option value="" selected disabled>-- Select Activity -- </option>
+                                            @foreach ($role_activities as $role_activity)
+                                                @if($role_activity)
+                                                    <option value="{{ $role_activity->id }}">{{ ucwords($role_activity->name) }}</option>
+                                                @endif
+                                            @endforeach
+                                    </select>
+                                    <label id="role_activity_idError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>

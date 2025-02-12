@@ -41,7 +41,8 @@ const TASK = (() => {
                         $("#tbl_task_paginate").hide();
                         $('#storeTaskForm')[0].reset();
                         $("#client_id").val(null).trigger("change");
-                        $("#client_activity_id").val(null).trigger("change");
+                        // $("#client_activity_id").val(null).trigger("change");
+                        $("#role_activity_id").val(null).trigger("change");
                         $('#create_button').load(' #create_button');
                         $('.error').hide();
                         $('.error').text('');
@@ -83,11 +84,13 @@ const TASK = (() => {
                         <td>${val.date_received}</td>
                         <td>${val.cluster}</td>
                         <td>${val.client}</td>
-                        <td>${val.client_activity}</td>
+                        <td>${val.role_activity}</td>
                         <td>${val.description}</td>
                         <td>${val.start_date}</td>
                         <td>${val.end_date}</td>
                         <td>${val.date_completed}</td>
+                        <td>${val.sla}</td>
+                        <td>${val.sla_miss}</td>
                         <td>${val.actual_handling_time}</td>
                         <td>${val.volume}</td>
                         <td>${val.remarks}</td>
@@ -161,7 +164,8 @@ const TASK = (() => {
             $('#shift_date_edit').val(shift_date);
             $('#date_received_edit').val(date_received);
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
-            $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
+            // $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
+            $("#role_activity_id_edit").val(response.data.data.role_activity_id).trigger("change");
             $('#description_edit').text(response.data.data.description);
             $('#status_edit').val(response.data.data.status);
             $('#start_date_edit').val(start_date);
@@ -217,6 +221,8 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#editTaskForm')[0].reset();
+                        // // $("#client_activity_id_edit").val(null).trigger("change");
+                        $("#role_activity_id_edit").val(null).trigger("change");
                         $("#client_activity_id_edit").val(null).trigger("change");
                         $('#description_edit').text('');
                         $('#volume_edit').attr('readonly', true);

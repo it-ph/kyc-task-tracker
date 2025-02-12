@@ -65,6 +65,8 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Date Completed</th>
+                                <th>SLA</th>
+                                <th>SLA Miss</th>
                                 <th>Actual Handling Time</th>
                                 <th>Volume</th>
                                 <th>Remarks</th>
@@ -118,6 +120,11 @@
     <script>
         $('#client_activity_id').change(function () {
             var text = $('#client_activity_id option:selected').text();
+            $('#description').val(text);
+        });
+
+        $('#role_activity_id').change(function () {
+            var text = $('#role_activity_id option:selected').text();
             $('#description').val(text);
         });
     </script>

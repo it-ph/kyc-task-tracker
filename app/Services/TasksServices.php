@@ -15,14 +15,14 @@ class TasksServices
         // $tasks = TasksCache::getAgentTasks($status); disabled TasksCache due to realtime checking if edit of task is already locked
 
         $status = strtolower($status);
-        $agent_id = Auth::user()->emp_id;
+        $agent_id = auth()->user()->id;
 
         $tasks = Task::query()
             ->with([
                 'thecluster:id,name',
                 'theclient:id,name',
-                'theagent:emp_id,email,emp_code,fullname,last_name',
-                'theclientactivity:id,name'
+                'theagent:id,email,fullname',
+                'theroleactivity:id,name,sla'
             ])
             ->where('agent_id', $agent_id);
 
@@ -84,12 +84,13 @@ class TasksServices
             //     <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: On Hold / Complete" onclick=TASK.show_stop('.$value->id.')><i class="fas fa-stop"></i></button>' :
             //     '-';
 
-            $employee_name = $value->theagent ? $value->theagent->fullname.' '.$value->theagent->last_name : "";
+            $employee_name = $value->theagent ? $value->theagent->fullname : "";
             $shift_date = date("m/d/Y",strtotime($value->shift_date));
             $date_received = date("m/d/Y",strtotime($value->date_received));
             $cluster = $value->thecluster->name;
             $client = $value->theclient->name;
-            $client_activity = $value->theclientactivity->name;
+            $role_activity = $value->theroleactivity->name;
+            $sla = $value->theroleactivity->sla;
             $description = $value->description;
             $start_date = date("m/d/Y h:i:s a",strtotime($value->start_date));
             $end_date = $value->end_date ? date("m/d/Y h:i:s a",strtotime($value->end_date)) : '-';
@@ -117,9 +118,9 @@ class TasksServices
                 $actual_handling_time = $actual_handling_timer;
             }
 
-            // $actual_handling_time = $value->actual_handling_time ? $value->actual_handling_time : '';
             // END OF ACTUAL HANDLING TIME
 
+            $sla_miss = $value->theroleactivity->sla;
             $volume = $value->volume == 0 ? '0' : $value->volume;
             $remarks = $value->remarks ? $value->remarks : '';
 
@@ -132,12 +133,14 @@ class TasksServices
                 'date_received' => $date_received,
                 'cluster' => $cluster,
                 'client' => $client,
-                'client_activity' => $client_activity,
+                'role_activity' => $role_activity,
+                'sla' => $sla,
                 'description' => $description,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'date_completed' => $date_completed,
                 'actual_handling_time' => $actual_handling_time,
+                'sla_miss' => $sla_miss,
                 'volume' => $volume,
                 'remarks' => $remarks,
             ];
@@ -154,22 +157,22 @@ class TasksServices
                 'thecluster:id,name',
                 'theclient:id,name',
                 'theagent:id,email',
-                'theagent:emp_id,fullname,last_name',
-                'theclientactivity:id,name'
+                'theagent:id,fullname',
+                'theroleactivity:id,name,sla'
             ]);
 
         // admin
-        if(Auth::user()->isAdmin())
+        if(auth()->user()->permission == 'admin')
         {
             $tasks = $tasks;
         }
         // operations manager
-        elseif(Auth::user()->isOperationsManager())
+        elseif(auth()->user()->permission == 'operations manager')
         {
             $tasks = $tasks->OMPermission();
         }
         // team leader
-        elseif(Auth::user()->isTeamLeader())
+        elseif(auth()->user()->permission == 'team leader')
         {
             $tasks = $tasks->TLPermission();
         }
@@ -195,12 +198,13 @@ class TasksServices
                 $status = '<span class="text-primary"><strong>'.$value->status.'</strong></span>';
             }
 
-            $employee_name = $value->theagent->fullname.' '.$value->theagent->last_name;
+            $employee_name = $value->theagent->fullname;
             $shift_date = date("m/d/Y",strtotime($value->shift_date));
             $date_received = date("m/d/Y",strtotime($value->date_received));
             $cluster = $value->thecluster->name;
             $client = $value->theclient->name;
-            $client_activity = $value->theclientactivity->name;
+            $role_activity = $value->theroleactivity->name;
+            $sla = $value->theroleactivity->sla;
             $description = $value->description;
             $start_date = date("m/d/Y h:i:s a",strtotime($value->start_date));
             $end_date = $value->end_date ? date("m/d/Y h:i:s a",strtotime($value->end_date)) : '-';
@@ -228,9 +232,9 @@ class TasksServices
                 $actual_handling_time = $actual_handling_timer;
             }
 
-            // $actual_handling_time = $value->actual_handling_time ? $value->actual_handling_time : '';
             // END OF ACTUAL HANDLING TIME
 
+            $sla_miss = $value->theroleactivity->sla;
             $volume = $value->volume == 0 ? '0' : $value->volume;
             $remarks = $value->remarks ? $value->remarks : '';
 
@@ -242,12 +246,14 @@ class TasksServices
                 'date_received' => $date_received,
                 'cluster' => $cluster,
                 'client' => $client,
-                'client_activity' => $client_activity,
+                'role_activity' => $role_activity,
+                'sla' => $sla,
                 'description' => $description,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'date_completed' => $date_completed,
                 'actual_handling_time' => $actual_handling_time,
+                'sla_miss' => $sla_miss,
                 'volume' => $volume,
                 'remarks' => $remarks,
             ];

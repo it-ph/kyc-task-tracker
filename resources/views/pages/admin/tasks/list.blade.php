@@ -57,11 +57,13 @@
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Client Activity</th>
+                                <th>Activity</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Date Completed</th>
+                                <th>SLA</th>
+                                <th>SLA Miss</th>
                                 <th>Actual Handling Time</th>
                                 <th>Volume</th>
                                 <th>Remarks</th>

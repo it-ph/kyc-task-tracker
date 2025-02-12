@@ -19,8 +19,6 @@ class CreateTasksTable extends Migration
             $table->integer('cluster_id');
             $table->integer('client_id');
             $table->datetime('date_received');
-            $table->integer('dashboard_activity_id');
-            $table->integer('client_activity_id');
             $table->longText('description');
             $table->string('status')->default('In Progress'); // In Progress, Completed
             $table->datetime('start_date')->nullable();

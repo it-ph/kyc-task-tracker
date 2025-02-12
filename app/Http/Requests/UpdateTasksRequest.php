@@ -29,7 +29,7 @@ class UpdateTasksRequest extends FormRequest
             'agent_id' => ['required'],
             'shift_date' => ['required'],
             'date_received' => ['required'],
-            'client_activity_id' => ['required'],
+            'role_activity_id' => ['required'],
             'description' => ['required'],
         ];
     }
@@ -42,7 +42,7 @@ class UpdateTasksRequest extends FormRequest
             'agent_id.required' => 'Employee Name is required.',
             'shift_date.required' => 'Shift Date is required.',
             'date_received.required' => 'Date Received is required.',
-            'client_activity_id.required' => 'Client Activity is required.',
+            'role_activity_id.required' => 'Activity is required.',
             'description.required' => 'Description is required.',
         ];
     }

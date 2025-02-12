@@ -21,11 +21,13 @@ const TASK = (() => {
                         <td>${val.date_received}</td>
                         <td>${val.cluster}</td>
                         <td>${val.client}</td>
-                        <td>${val.client_activity}</td>
+                        <td>${val.role_activity}</td>
                         <td>${val.description}</td>
                         <td>${val.start_date}</td>
                         <td>${val.end_date}</td>
                         <td>${val.date_completed}</td>
+                        <td>${val.sla}</td>
+                        <td>${val.sla_miss}</td>
                         <td>${val.actual_handling_time}</td>
                         <td>${val.volume}</td>
                         <td>${val.remarks}</td>

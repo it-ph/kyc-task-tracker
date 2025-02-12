@@ -85,7 +85,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
@@ -103,7 +103,28 @@
                                 </div>
                             </div>
                         </div>
+                    </div> --}}
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="role_activity_id" class="col-form-label custom-label"><strong>ACTIVITY:<span class="important">*</span></strong></label>
+                                    <select class="form-control select2" name="role_activity_id" id="role_activity_id_edit" style="width:100%;">
+                                        <option value="" selected disabled>-- Select Activity -- </option>
+                                        @foreach ($role_activities as $role_activity)
+                                                @if($role_activity)
+                                                    <option {{ old('role_activity_id') == $role_activity->id ? "selected" : "" }}
+                                                        value="{{ $role_activity->id }}">{{ ucwords($role_activity->name) }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-2">

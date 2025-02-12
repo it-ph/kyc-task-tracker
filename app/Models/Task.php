@@ -54,9 +54,9 @@ class Task extends Model
         return $this->hasOne(Permission::class, 'user_id', 'agent_id')->withTrashed();
     }
 
-    public function theclientactivity()
+    public function theroleactivity()
     {
-        return $this->belongsTo(ClientActivity::class, 'client_activity_id')->withTrashed();
+        return $this->belongsTo(RoleActivity::class, 'role_activity_id')->withTrashed();
     }
 
     public function thecreatedby()
