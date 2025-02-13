@@ -54,7 +54,7 @@ class PageController extends GlobalVariableController
     // ADMIN, TL, & OM ACCESS
     public function showAgentTaskLists(Request $request)
     {
-        // accountant
+        // agent
         if(auth()->user()->permission == 'agent')
         {
             return redirect()->route('unauthorized');
@@ -78,13 +78,10 @@ class PageController extends GlobalVariableController
             return view('errors.404');
         }
 
-        $clients = auth()->user()->permission == 'admin' ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
-
-        $user_client_activities = ClientActivity::query()
-            ->select('id','agent_id','name')
-            ->where('agent_id', auth()->user()->id)
-            ->orderBy('name', 'ASC')
-            ->get();
+        $query = Client::with('thecluster');
+        $clients = auth()->user()->permission == 'admin' 
+            ? $query->get() 
+            : $query->cluster()->get();
 
         $role_activities = RoleActivity::query()
             ->select('id','name','sla')
@@ -92,7 +89,7 @@ class PageController extends GlobalVariableController
             ->orderBy('name', 'ASC')
             ->get();
 
-        return view('pages.agent.tasks.list', compact('status','clients','user_client_activities','role_activities'));
+        return view('pages.agent.tasks.list', compact('status','clients','role_activities'));
     }
 
     /**
@@ -102,8 +99,8 @@ class PageController extends GlobalVariableController
     {
         $status = $request['status'];
 
-        // accountant
-        if(Auth::user()->isAccountant())
+        // agent
+        if(Auth::user()->isagent())
         {
             return redirect()->route('unauthorized');
         }

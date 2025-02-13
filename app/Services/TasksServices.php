@@ -38,20 +38,30 @@ class TasksServices
         }
 
         foreach($tasks as $value) {
-            if ($value->status == 'In Progress') {
-                $status = '<span class="text-success"><strong>'.$value->status.'</strong></span>';
-                $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
-                    <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="Pause Task: On Hold" onclick=TASK.show_pause('.$value->id.')><i class="fas fa-pause"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: Complete" onclick=TASK.show_stop('.$value->id.')><i class="fas fa-stop"></i></button>';
+            $statusClass = '';
+            $action = '';
+
+            switch ($value->status) {
+                case 'In Progress':
+                    $statusClass = 'text-success';
+                    $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
+                                <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="Pause Task: On Hold" onclick=TASK.show_pause('.$value->id.')><i class="fas fa-pause"></i></button>
+                                <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: Complete" onclick=TASK.show_stop('.$value->id.')><i class="fas fa-stop"></i></button>';
+                    break;
+                case 'On Hold':
+                    $statusClass = 'text-warning';
+                    $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
+                            <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick=TASK.show_resume('.$value->id.')><i class="fas fa-play"></i></button>';
+                    break;
+                case 'Completed':
+                    $statusClass = 'text-primary';
+                    break;
+                default:
+                    break;
             }
-            else if ($value->status == 'On Hold') {
-                $status = '<span class="text-warning"><strong>'.$value->status.'</strong></span>';
-                $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
-                <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick=TASK.show_resume('.$value->id.')><i class="fas fa-play"></i></button>';
-            }
-            else if ($value->status == 'Completed') {
-                $status = '<span class="text-primary"><strong>'.$value->status.'</strong></span>';
-            }
+
+            $status = '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
+
 
             if($value->status == "Completed")
             {
@@ -141,20 +151,22 @@ class TasksServices
                 'theroleactivity:id,name,sla'
             ]);
 
-        // admin
-        if(auth()->user()->permission == 'admin')
-        {
-            $tasks = $tasks;
-        }
-        // operations manager
-        elseif(auth()->user()->permission == 'operations manager')
-        {
-            $tasks = $tasks->OMPermission();
-        }
-        // team leader
-        elseif(auth()->user()->permission == 'team leader')
-        {
-            $tasks = $tasks->TLPermission();
+        // Get user permission once
+        $userPermission = auth()->user()->permission;
+
+        // Filter tasks based on user permission
+        switch ($userPermission) {
+            case 'admin':
+                // Admin: No filtering needed
+                break;
+            case 'operations manager':
+                $tasks = $tasks->OMPermission();
+                break;
+            case 'team leader':
+                $tasks = $tasks->TLPermission();
+                break;
+            default:
+                break;
         }
 
         // filter by status
@@ -168,15 +180,22 @@ class TasksServices
         }
 
         foreach($tasks as $value) {
-            if ($value->status == 'In Progress') {
-                $status = '<span class="text-success"><strong>'.$value->status.'</strong></span>';
+            $statusClass = '';
+            switch ($value->status) {
+                case 'In Progress':
+                    $statusClass = 'text-success';
+                    break;
+                case 'On Hold':
+                    $statusClass = 'text-warning';
+                    break;
+                case 'Completed':
+                    $statusClass = 'text-primary';
+                    break;
+                default:
+                    break;
             }
-            else if ($value->status == 'On Hold') {
-                $status = '<span class="text-warning"><strong>'.$value->status.'</strong></span>';
-            }
-            else if ($value->status == 'Completed') {
-                $status = '<span class="text-primary"><strong>'.$value->status.'</strong></span>';
-            }
+
+            $status = '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
 
             $employee_name = $value->theagent->fullname;
             $shift_date = date("m/d/Y",strtotime($value->shift_date));

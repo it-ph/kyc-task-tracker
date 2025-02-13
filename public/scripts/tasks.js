@@ -41,7 +41,6 @@ const TASK = (() => {
                         $("#tbl_task_paginate").hide();
                         $('#storeTaskForm')[0].reset();
                         $("#client_id").val(null).trigger("change");
-                        // $("#client_activity_id").val(null).trigger("change");
                         $("#role_activity_id").val(null).trigger("change");
                         $('#create_button').load(' #create_button');
                         $('.error').hide();
@@ -164,7 +163,6 @@ const TASK = (() => {
             $('#shift_date_edit').val(shift_date);
             $('#date_received_edit').val(date_received);
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
-            // $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
             $("#role_activity_id_edit").val(response.data.data.role_activity_id).trigger("change");
             $('#description_edit').text(response.data.data.description);
             $('#status_edit').val(response.data.data.status);
@@ -221,7 +219,6 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#editTaskForm')[0].reset();
-                        // // $("#client_activity_id_edit").val(null).trigger("change");
                         $("#role_activity_id_edit").val(null).trigger("change");
                         $("#client_activity_id_edit").val(null).trigger("change");
                         $('#description_edit').text('');

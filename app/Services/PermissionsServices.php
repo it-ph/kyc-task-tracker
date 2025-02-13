@@ -19,20 +19,24 @@ class PermissionsServices
         ->select('id','email','fullname','cluster_id','client_id','tl_id','om_id','role_id','permission','status')
         ->where('permission','<>','superadmin');
 
-        // admin
-        if(auth()->user()->permission == 'admin')
-        {
-            $users = $users->get();
-        }
-        // operations manager
-        elseif(auth()->user()->permission == 'operations manager')
-        {
-            $users = $users->OMPermission()->get();
-        }
-        // team leader
-        elseif(auth()->user()->permission == 'team leader')
-        {
-            $users = $users->TLPermission()->get();
+        // Get user permission once
+        $userPermission = auth()->user()->permission;
+
+        // Filter users based on user permission
+        switch ($userPermission) {
+            case 'admin':
+                // Admin: No filtering needed, get all users
+                $users = $users->get();
+                break;
+            case 'operations manager':
+                $users = $users->OMPermission()->get();
+                break;
+            case 'team leader':
+                $users = $users->TLPermission()->get();
+                break;
+            default:
+                // Optional: Handle any other case if needed
+                break;
         }
 
         foreach($users as $value) {
