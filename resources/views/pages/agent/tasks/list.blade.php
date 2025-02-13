@@ -66,7 +66,7 @@
                                 <th>End Date</th>
                                 <th>Date Completed</th>
                                 <th>SLA</th>
-                                <th>SLA Miss</th>
+                                <th>SLA Missed</th>
                                 <th>Actual Handling Time</th>
                                 <th>Volume</th>
                                 <th>Remarks</th>

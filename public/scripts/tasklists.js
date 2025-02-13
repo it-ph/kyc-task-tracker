@@ -15,21 +15,21 @@ const TASK = (() => {
             response.data.data.forEach(val => {
                 table +=
                     `<tr>
-                        <td>${val.status}</td>
+                        <td class="text-center">${val.status}</td>
                         <td>${val.employee_name}</td>
-                        <td>${val.shift_date}</td>
-                        <td>${val.date_received}</td>
+                        <td class="text-center">${val.shift_date}</td>
+                        <td class="text-center">${val.date_received}</td>
                         <td>${val.cluster}</td>
                         <td>${val.client}</td>
                         <td>${val.role_activity}</td>
                         <td>${val.description}</td>
                         <td>${val.start_date}</td>
                         <td>${val.end_date}</td>
-                        <td>${val.date_completed}</td>
+                        <td class="text-center">${val.date_completed}</td>
                         <td>${val.sla}</td>
-                        <td>${val.sla_miss}</td>
-                        <td>${val.actual_handling_time}</td>
-                        <td>${val.volume}</td>
+                        <td class="text-center">${val.sla_missed}</td>
+                        <td class="text-center">${val.actual_handling_time}</td>
+                        <td class="text-center">${val.volume}</td>
                         <td>${val.remarks}</td>
                     </tr>`;
             });
