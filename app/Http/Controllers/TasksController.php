@@ -86,7 +86,7 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task updated successfully!');
         try {
-            // if sla was change sla missed must be updated also
+            // IF SLA WAS CHANGE SLA MISSED MUST BE UPDATED ALSO
             $this->model->findOrfail($id)->update($request->all());
 
         } catch (\Throwable $th) {
