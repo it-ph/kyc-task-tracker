@@ -126,24 +126,20 @@ class TimeElapsedHelper
     // }
 
     public function convertTime($hours)
-{
-    // Calculate total seconds from hours
-    $totalSeconds = $hours * 3600;
+    {
+        $totalSeconds = $hours * 3600;
+        $days = floor($hours / 24);
+        $remainingHours = floor($hours) % 24;
+        $remainingSeconds = $totalSeconds - ($days * 24 * 3600) - ($remainingHours * 3600);
+        $minutes = floor($remainingSeconds / 60);
+        $remainingSeconds -= $minutes * 60;
 
-    // Calculate full days
-    $days = floor($hours / 24);
+        return sprintf('%02d:%02d:%02d:%02d', $days, $remainingHours, $minutes, $remainingSeconds);
+    }
 
-    // Calculate remaining hours after full days
-    $remainingHours = floor($hours) % 24;
-
-    // Calculate remaining seconds after full days and hours
-    $remainingSeconds = $totalSeconds - ($days * 24 * 3600) - ($remainingHours * 3600);
-
-    // Calculate minutes
-    $minutes = floor($remainingSeconds / 60);
-    $remainingSeconds -= $minutes * 60;
-
-    // Format the output as DD:HH:MM:SS
-    return sprintf('%02d:%02d:%02d:%02d', $days, $remainingHours, $minutes, $remainingSeconds);
-}
+    public function convertWorkingTime($time)
+    {
+        list($days, $hours, $minutes, $seconds) = explode(':', $time);
+        return $days * 24 + $hours + $minutes / 60 + $seconds / 3600;
+    }
 }

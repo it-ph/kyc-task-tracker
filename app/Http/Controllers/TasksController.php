@@ -13,6 +13,7 @@ use Facades\App\Http\Helpers\TimeElapsedHelper;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\StopTaskRequest;
 use App\Http\Controllers\GlobalVariableController;
+use App\Models\RoleActivity;
 
 class TasksController extends GlobalVariableController
 {
@@ -86,8 +87,12 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task updated successfully!');
         try {
-            // IF SLA WAS CHANGE SLA MISSED MUST BE UPDATED ALSO
-            $this->model->findOrfail($id)->update($request->all());
+            $task = $this->model->findOrfail($id);
+            $sla_activity = RoleActivity::findOrfail($request['role_activity_id']);
+            $working_hours = TimeElapsedHelper::convertWorkingTime($task->actual_handling_time);
+            $sla_missed = $working_hours > $sla_activity['sla'] ? 1 : 0;
+            $request['sla_missed'] = $sla_missed;
+            $task->update($request->all());
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
